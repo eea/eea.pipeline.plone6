@@ -32,11 +32,11 @@ pipeline {
       }
     }
       
-    stage('Build & Tests - ADVISORY-BOARD-BACKEND - new PLONE-BACKEND release') {
-      steps {
-        build job: '../advisory-board-backend/master', parameters: [[$class: 'StringParameterValue', name: 'TARGET_BRANCH', value: 'master']]
-      }
-    }
+   // stage('Build & Tests - ADVISORY-BOARD-BACKEND - new PLONE-BACKEND release') {
+   //   steps {
+   //     build job: '../advisory-board-backend/master', parameters: [[$class: 'StringParameterValue', name: 'TARGET_BRANCH', value: 'master']]
+   //   }
+   // }
       
     }
     }
