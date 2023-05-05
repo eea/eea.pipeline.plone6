@@ -16,17 +16,18 @@ pipeline {
       steps {
         node(label: 'docker') {
           withCredentials([string(credentialsId: 'eea-jenkins-token', variable: 'GITHUB_TOKEN'),  string(credentialsId: 'plone-backend-trigger', variable: 'TRIGGER_MAIN_URL'), usernamePassword(credentialsId: 'jekinsdockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-           sh '''docker pull eeacms/gitflow; docker run -i --rm --name="$BUILD_TAG-nightly-ploneback" -e GIT_BRANCH="master" -e GIT_NAME="plone-backend" -e DOCKERHUB_REPO="eeacms/plone-backend" -e EXTRACT_VERSION_SH="calculate_next_release.sh" -e GIT_TOKEN="$GITHUB_TOKEN" -e DOCKERHUB_USER="$DOCKERHUB_USER" -e DOCKERHUB_PASS="$DOCKERHUB_PASS"  -e TRIGGER_MAIN_URL="$TRIGGER_MAIN_URL" -e DEPENDENT_DOCKERFILE_URL="eea/eea-website-backend/blob/master/Dockerfile eea/advisory-board-backend/blob/master/Dockerfile eea/forest-backend/blob/master/Dockerfile" -e GITFLOW_BEHAVIOR="TAG_ONLY" eeacms/gitflow'''
-         }
-       }
-     }
-   }
+            sh '''docker pull eeacms/gitflow; docker run -i --rm --name="$BUILD_TAG-nightly-ploneback" -e GIT_BRANCH="master" -e GIT_NAME="plone-backend" -e DOCKERHUB_REPO="eeacms/plone-backend" -e EXTRACT_VERSION_SH="calculate_next_release.sh" -e GIT_TOKEN="$GITHUB_TOKEN" -e DOCKERHUB_USER="$DOCKERHUB_USER" -e DOCKERHUB_PASS="$DOCKERHUB_PASS"  -e TRIGGER_MAIN_URL="$TRIGGER_MAIN_URL" -e DEPENDENT_DOCKERFILE_URL="eea/eea-website-backend/blob/master/Dockerfile eea/advisory-board-backend/blob/master/Dockerfile eea/forest-backend/blob/master/Dockerfile" -e GITFLOW_BEHAVIOR="TAG_ONLY" eeacms/gitflow'''
+          }
+        }
+      }
+    }
 
     
     stage('Build & Tests & release dependents') {
     parallel {
     
-    stage('EEA-WEBSITE-BACKEND') {  
+    stage('EEA-WEBSITE-BACKEND') {
+    stages {  
       stage('Build & Tests - EEA-WEBSITE-BACKEND - new PLONE-BACKEND release') {
         steps {
           build job: '../eea-website-backend/master', parameters: [[$class: 'StringParameterValue', name: 'TARGET_BRANCH', value: 'master']]
@@ -41,9 +42,10 @@ pipeline {
          }
        }
      }
-    }  
+    }}  
       
     stage('ADVISORY-BOARD-BACKEND') {
+    stages {
       stage('Build & Tests - ADVISORY-BOARD-BACKEND - new PLONE-BACKEND release') {
         steps {
           build job: '../advisory-board-backend/master', parameters: [[$class: 'StringParameterValue', name: 'TARGET_BRANCH', value: 'master']]
@@ -58,9 +60,10 @@ pipeline {
           }
         }
       }
-    }  
+    }}  
 
     stage('FOREST-BACKEND') {
+    stages {
       stage('Build & Tests - FOREST-BACKEND - new PLONE-BACKEND release') {
         steps {
           build job: '../forest-backend/master', parameters: [[$class: 'StringParameterValue', name: 'TARGET_BRANCH', value: 'master']]
@@ -75,7 +78,7 @@ pipeline {
           }
         }
       }
-    }        
+    }}        
       
 
       
