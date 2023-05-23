@@ -16,7 +16,7 @@ pipeline {
       steps {
         node(label: 'docker') {
           withCredentials([string(credentialsId: 'eea-jenkins-token', variable: 'GITHUB_TOKEN'),  string(credentialsId: 'plone-backend-trigger', variable: 'TRIGGER_MAIN_URL'), usernamePassword(credentialsId: 'jekinsdockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-            sh '''docker pull eeacms/gitflow; docker run -i --rm --name="$BUILD_TAG-nightly-ploneback" -e GIT_BRANCH="master" -e GIT_NAME="plone-backend" -e DOCKERHUB_REPO="eeacms/plone-backend" -e EXTRACT_VERSION_SH="calculate_next_release.sh" -e GIT_TOKEN="$GITHUB_TOKEN" -e DOCKERHUB_USER="$DOCKERHUB_USER" -e DOCKERHUB_PASS="$DOCKERHUB_PASS"  -e TRIGGER_MAIN_URL="$TRIGGER_MAIN_URL" -e DEPENDENT_DOCKERFILE_URL="eea/eea-website-backend/blob/master/Dockerfile eea/advisory-board-backend/blob/master/Dockerfile eea/forest-backend/blob/master/Dockerfile" -e GITFLOW_BEHAVIOR="TAG_ONLY" eeacms/gitflow'''
+            sh '''docker pull eeacms/gitflow; docker run -i --rm --name="$BUILD_TAG-nightly-ploneback" -e GIT_BRANCH="master" -e GIT_NAME="plone-backend" -e DOCKERHUB_REPO="eeacms/plone-backend" -e EXTRACT_VERSION_SH="calculate_next_release.sh" -e GIT_TOKEN="$GITHUB_TOKEN" -e DOCKERHUB_USER="$DOCKERHUB_USER" -e DOCKERHUB_PASS="$DOCKERHUB_PASS"  -e TRIGGER_MAIN_URL="$TRIGGER_MAIN_URL" -e DEPENDENT_DOCKERFILE_URL="eea/eea-website-backend/blob/master/Dockerfile eea/advisory-board-backend/blob/master/Dockerfile eea/fise-backend/blob/master/Dockerfile" -e GITFLOW_BEHAVIOR="TAG_ONLY" eeacms/gitflow'''
           }
         }
       }
@@ -62,18 +62,18 @@ pipeline {
       }
     }}  
 
-    stage('FOREST-BACKEND') {
+    stage('FISE-BACKEND') {
     stages {
-      stage('Build & Tests - FOREST-BACKEND - new PLONE-BACKEND release') {
+      stage('Build & Tests - FISE-BACKEND - new PLONE-BACKEND release') {
         steps {
-          build job: '../forest-backend/master', parameters: [[$class: 'StringParameterValue', name: 'TARGET_BRANCH', value: 'master']]
+          build job: '../fise-backend/master', parameters: [[$class: 'StringParameterValue', name: 'TARGET_BRANCH', value: 'master']]
         }
       }
-      stage('Release - FOREST-BACKEND') {
+      stage('Release - FISE-BACKEND') {
         steps {
           node(label: 'docker') {
-            withCredentials([string(credentialsId: 'eea-jenkins-token', variable: 'GITHUB_TOKEN'), string(credentialsId: 'forest-backend-trigger', variable: 'TRIGGER_MAIN_URL'),usernamePassword(credentialsId: 'jekinsdockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-              sh '''docker pull eeacms/gitflow; docker run -i --rm --name="$BUILD_TAG-nightly-forest-back" -e GIT_BRANCH="master" -e GIT_NAME="forest-backend" -e EXTRACT_VERSION_SH="calculate_next_release.sh" -e GIT_TOKEN="$GITHUB_TOKEN" -e TRIGGER_MAIN_URL="$TRIGGER_MAIN_URL" -e DOCKERHUB_USER="$DOCKERHUB_USER" -e DOCKERHUB_PASS="$DOCKERHUB_PASS" -e DOCKERHUB_REPO="eeacms/forest-backend" -e DEPENDENT_DOCKERFILE_URL=""  -e TRIGGER_RELEASE="" -e GITFLOW_BEHAVIOR="TAG_ONLY" eeacms/gitflow'''
+            withCredentials([string(credentialsId: 'eea-jenkins-token', variable: 'GITHUB_TOKEN'), string(credentialsId: 'fise-backend-trigger', variable: 'TRIGGER_MAIN_URL'),usernamePassword(credentialsId: 'jekinsdockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+              sh '''docker pull eeacms/gitflow; docker run -i --rm --name="$BUILD_TAG-nightly-fise-back" -e GIT_BRANCH="master" -e GIT_NAME="fise-backend" -e EXTRACT_VERSION_SH="calculate_next_release.sh" -e GIT_TOKEN="$GITHUB_TOKEN" -e TRIGGER_MAIN_URL="$TRIGGER_MAIN_URL" -e DOCKERHUB_USER="$DOCKERHUB_USER" -e DOCKERHUB_PASS="$DOCKERHUB_PASS" -e DOCKERHUB_REPO="eeacms/fise-backend" -e DEPENDENT_DOCKERFILE_URL=""  -e TRIGGER_RELEASE="" -e GITFLOW_BEHAVIOR="TAG_ONLY" eeacms/gitflow'''
             }
           }
         }
