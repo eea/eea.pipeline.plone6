@@ -4,8 +4,8 @@ pipeline {
     cron('H 1 * * *')
   }
    environment {
-         #to replace when clms is upgraded to 6.1 ( and moved to Rancher 2)
-         #DOCKERFILE_TO_UPDATE = "eea/eea-website-backend/blob/master/Dockerfile eea/advisory-board-backend/blob/master/Dockerfile eea/fise-backend/blob/master/Dockerfile eea/insitu-backend/blob/master/Dockerfile eea/clms-backend/blob/master/Dockerfile eea/ied-backend/blob/master/Dockerfile eea/freshwater-backend/blob/master/Dockerfile eea/bise-backend/blob/master/Dockerfile"
+         // to replace when clms is upgraded to 6.1 ( and moved to Rancher 2)
+         // DOCKERFILE_TO_UPDATE = "eea/eea-website-backend/blob/master/Dockerfile eea/advisory-board-backend/blob/master/Dockerfile eea/fise-backend/blob/master/Dockerfile eea/insitu-backend/blob/master/Dockerfile eea/clms-backend/blob/master/Dockerfile eea/ied-backend/blob/master/Dockerfile eea/freshwater-backend/blob/master/Dockerfile eea/bise-backend/blob/master/Dockerfile"
          DOCKERFILE_TO_UPDATE = "eea/eea-website-backend/blob/master/Dockerfile eea/advisory-board-backend/blob/master/Dockerfile eea/fise-backend/blob/master/Dockerfile eea/insitu-backend/blob/master/Dockerfile eea/ied-backend/blob/master/Dockerfile eea/freshwater-backend/blob/master/Dockerfile eea/bise-backend/blob/master/Dockerfile"
    }
   stages {
